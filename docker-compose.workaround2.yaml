@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  sam-local:
+    image: public.ecr.aws/sam/build-nodejs18.x:1.109.0
+    volumes:
+      - $PWD:/var/task:ro
+      - $PWD:$PWD:ro
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    ports:
+      - "3000:3000"
+    command: "sam local start-api --host 0.0.0.0 --port 3000 --debug --skip-pull-image --warm-containers LAZY \
+              --docker-volume-basedir $PWD --container-host host.docker.internal --container-host-interface 0.0.0.0"
+    extra_hosts:
+      - host.docker.internal:host-gateway
